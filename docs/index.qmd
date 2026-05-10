@@ -1,9 +1,9 @@
 ---
-title: "**PRÁTICA ESTATÍSTICA II**"
-subtitle: "**ATIVIDADE AVALIATIVA 0**"
-author: "Nome1 (<seuemail1@id.uff.br>) <br> Nome2 (<seuemail2@id.uff.br>)"
+title: "**PROJETO I**"
+subtitle: "**ATIVIDADE AVALIATIVA 6**"
+author: "Vitor Eduardo Bezerra Ferreira (<ferreiravitor@id.uff.br>)"
 date: today
-date-format: "DD/MM/YYYY"
+date-format: "11/05/2026"
 institute: "Universidade Federal Fluminense"
 format:
   revealjs:
@@ -17,178 +17,419 @@ format:
     margin: 0.07
     auto-stretch: false
     title-slide-attributes:
-      data-background-image: "Capa.png"
+      data-background-image: "Capa_proj1.png"
       data-background-size: cover
 ---
 
-# **PRIMEIRO CAPÍTULO**{data-background-image="Capa.png" style="text-align:center"}
+```{r,include=F}
 
-## **PRIMEIRA SEÇÃO**
+# Todas as bibliotecas ####
 
-## **BLOCOS**
+require(openxlsx)
+require(dplyr)  
+require(gtsummary)          
+require(gt)               
+require(rstatix)  
+require(ggplot2)          
+require(qqplotr)           
+require(DescTools)   
+require(stringr)    
+require(ggwordcloud) 
+require(wordcloud2) 
+require(tidyr)       
+require(tidytext)   
+require(pals)       
+require(png)       
+library(tidyverse)
+library(broom)
+library(tinytex)
+
+# Formatação pra português ####
+
+theme_gtsummary_language("pt", big.mark = ".", decimal.mark = ",")
+
+# Dados ####
+
+# Dados = read.xlsx("docs/Nutricao.xlsx")
+Dados = read.xlsx("Nutricao.xlsx")
+
+DadosEmb = Dados %>%  select(1:20, "Embutidos")
+DadosEmbQuali = DadosEmb %>% select(1:15, "Embutidos")
+
+# Tabelas ####
+
+tbl_summary(data = DadosEmbQuali)
+
+tbl_summary(data = DadosEmbQuali,
+            by = Embutidos)
+
+tbl_summary(data = DadosEmbQuali,
+            by = Embutidos ,
+            percent = "row")
+
+# Testes para o esperado ####
+
+chisq.test(Dados$Genero,Dados$Embutidos)$expected
+
+chisq.test(Dados$Raca_cor,Dados$Embutidos)$expected # Menor que 5
+
+chisq.test(Dados$Regiao,Dados$Embutidos)$expected
+
+chisq.test(Dados$Isolamento,Dados$Embutidos)$expected
+
+chisq.test(Dados$Trabalha,Dados$Embutidos)$expected
+
+chisq.test(Dados$Profissional_Saude,Dados$Embutidos)$expected
+
+chisq.test(Dados$Renda_familiar,Dados$Embutidos)$expected
+
+chisq.test(Dados$Escolaridade,Dados$Embutidos)$expected # Menor que 5
+
+chisq.test(Dados$Covid,Dados$Embutidos)$expected
+
+chisq.test(Dados$Consulta_Nutricionista,Dados$Embutidos)$expected
+
+chisq.test(Dados$Dificuldade_Financeira,Dados$Embutidos)$expected
+
+chisq.test(Dados$Acesso_Alimento,Dados$Embutidos)$expected
+
+chisq.test(Dados$Tempo_Preparo_Refeicao,Dados$Embutidos)$expected
+
+chisq.test(Dados$cigarro,Dados$Embutidos)$expected
+
+chisq.test(Dados$atividade_fisica_pandemia,Dados$Embutidos)$expected
+
+# Tabela com p-valor ####
+
+tbl_summary(data = DadosEmbQuali,
+            by = Embutidos,
+            percent = "row") %>%
+  add_p()
+
+tbl_summary(
+  data = DadosEmbQuali,
+  by = Embutidos,
+  percent = "row"
+) %>%
+  add_p(
+    test = list(
+      Escolaridade ~ "fisher.test",
+      Raca_cor     ~ "fisher.test",
+      everything() ~ "chisq.test"
+    )
+  ) %>% 
+  bold_p(t = 0.05)
+
+# Resíduos acima e abaixo de 1,96 ####
+
+chisq.test(Dados$Genero,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Raca_cor,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Regiao,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Isolamento,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Trabalha,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Profissional_Saude,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Renda_familiar,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Escolaridade,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Consulta_Nutricionista,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Dificuldade_Financeira,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Acesso_Alimento,Dados$Embutidos)$stdres
+
+chisq.test(Dados$Tempo_Preparo_Refeicao,Dados$Embutidos)$stdres
+
+chisq.test(Dados$cigarro,Dados$Embutidos)$stdres
+
+chisq.test(Dados$atividade_fisica_pandemia,Dados$Embutidos)$stdres
+
+# Cramer ####
+
+cramer_fun <- function(data, variable, by, ...) {
+  tab <- table(data[[variable]], data[[by]])
+  v <- cramer_v(tab)
+  tibble::tibble(`**Cramér**` = round(v, 3))
+}
+
+# Tabela ####
+
+tabela <- DadosEmbQuali %>%
+  tbl_summary(
+    by = Embutidos,
+    percent = "row",
+    label = list(
+      Genero                    ~ "Gênero<sup>Q</sup>",
+      Raca_cor                  ~ "Raça/Cor<sup>F</sup>",
+      Regiao                    ~ "Região<sup>Q</sup>",
+      Isolamento                ~ "Isolamento<sup>Q</sup>",
+      Trabalha                  ~ "Trabalha<sup>Q</sup>",
+      Profissional_Saude        ~ "Profissional da Saúde<sup>Q</sup>",
+      Renda_familiar            ~ "Renda Familiar<sup>Q</sup>",
+      Escolaridade              ~ "Escolaridade<sup>F</sup>",
+      Covid                     ~ "Covid<sup>Q</sup>",
+      Consulta_Nutricionista    ~ "Consulta com Nutricionista<sup>Q</sup>",
+      Dificuldade_Financeira    ~ "Dificuldade Financeira<sup>Q</sup>",
+      Acesso_Alimento           ~ "Acesso a Alimento<sup>Q</sup>",
+      Tempo_Preparo_Refeicao    ~ "Tempo no Preparo da Refeição<sup>Q</sup>",
+      cigarro                   ~ "Cigarro<sup>Q</sup>",
+      atividade_fisica_pandemia ~ "Atividade Física<sup>Q</sup>"
+    )
+  ) %>%
+  add_p(
+    pvalue_fun = label_style_pvalue(digits = 3),
+    test = list(
+      Escolaridade ~ "fisher.test",
+      Raca_cor     ~ "fisher.test",
+      everything() ~ "chisq.test"
+    )
+  ) %>%
+  bold_p(t = 0.05) %>%
+  add_stat(fns = everything() ~ cramer_fun) %>%
+  modify_spanning_header(all_stat_cols() ~ "**Mudança no consumo de Embutidos**") %>%
+  modify_header(label ~ "**Variáveis**", all_stat_cols() ~ "**{level}**<br>{n} ({style_percent(p)}%)") %>%
+  bold_labels() %>%
+  modify_footnote(everything() ~ NA) %>%
+  as_gt() %>%
+  # COLUNA AUMENTOU (stat_1)
+  tab_style(
+    style = cell_text(color = "blue", weight = "bold"),
+    locations = cells_body(
+      columns = stat_1,
+      rows = (variable == "Regiao" & label %in% c("Nordeste", "Norte")) |
+             (variable == "Raca_cor" & label == "Parda") |
+             (variable == "Escolaridade" & label %in% c("Ensino Superior Completo")) |
+             (variable == "Consulta_Nutricionista" & label == "Não") |
+             (variable == "Dificuldade_Financeira" & label == "Sim") |
+             (variable == "Acesso_Alimento" & label == "Sim") |
+             (variable == "Tempo_Preparo_Refeicao" & label == "Diminuiu") |
+             (variable == "atividade_fisica_pandemia" & label == "Diminuiu")
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(color = "red", weight = "bold"),
+    locations = cells_body(
+      columns = stat_1,
+      rows = (variable == "Regiao" & label == "Sudeste") |
+             (variable == "Raca_cor" & label == "Branca") |
+             (variable == "Renda_familiar" & label == "mais de R$ 8.640") |
+             (variable == "Consulta_Nutricionista" & label == "Sim") |
+             (variable == "Dificuldade_Financeira" & label == "Não") |
+             (variable == "Acesso_Alimento" & label == "Não") |
+             (variable == "Tempo_Preparo_Refeicao" & label == "Não alterou") |
+             (variable == "atividade_fisica_pandemia" & label %in% c("Aumentou", "Não alterou"))
+    )
+  ) %>%
+  
+  # COLUNA DIMINUIU (stat_2)
+  tab_style(
+    style = cell_text(color = "blue", weight = "bold"),
+    locations = cells_body(
+      columns = stat_2,
+      rows = (variable == "Regiao" & label == "Sudeste") |
+             (variable == "Raca_cor" & label %in% c("Parda", "Preta")) |
+             (variable == "Trabalha" & label == "Não") |
+             (variable == "Profissional_Saude" & label == "Não") |
+             (variable == "Renda_familiar" & label == "até R$ 1254,00") |
+             (variable == "Escolaridade" & label == "Ensino Médio Completo") |
+             (variable == "Consulta_Nutricionista" & label == "Sim") |
+             (variable == "Dificuldade_Financeira" & label == "Sim") |
+             (variable == "Acesso_Alimento" & label == "Sim") |
+             (variable == "cigarro" & label == "Sim") |
+             (variable == "atividade_fisica_pandemia" & label == "Aumentou")
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(color = "red", weight = "bold"),
+    locations = cells_body(
+      columns = stat_2,
+      rows = (variable == "Raca_cor" & label == "Branca") |
+             (variable == "Trabalha" & label == "Sim") |
+             (variable == "Profissional_Saude" & label == "Sim") |
+             (variable == "Renda_familiar" & label == "mais de R$ 8.640") |
+             (variable == "Escolaridade" & label == "Pós-graduação") |
+             (variable == "Consulta_Nutricionista" & label == "Não") |
+             (variable == "Dificuldade_Financeira" & label == "Não") |
+             (variable == "Acesso_Alimento" & label == "Não") |
+             (variable == "cigarro" & label == "Não")
+    )
+  ) %>%
+  
+  # COLUNA NÃO ALTEROU (stat_3)
+  tab_style(
+    style = cell_text(color = "blue", weight = "bold"),
+    locations = cells_body(
+      columns = stat_3,
+      rows = (variable == "Genero" & label == "Masculino") |
+             (variable == "Regiao" & label == "Centro-oeste") |
+             (variable == "Isolamento" & label == "Não") |
+             (variable == "Trabalha" & label == "Sim") |
+             (variable == "Profissional_Saude" & label == "Sim") |
+             (variable == "Renda_familiar" & label == "mais de R$ 8.640") |
+             (variable == "Consulta_Nutricionista" & label == "Não") |
+             (variable == "Dificuldade_Financeira" & label == "Não") |
+             (variable == "Acesso_Alimento" & label == "Não") |
+             (variable == "Tempo_Preparo_Refeicao" & label == "Não alterou") |
+             (variable == "atividade_fisica_pandemia" & label == "Não alterou")
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(color = "red", weight = "bold"),
+    locations = cells_body(
+      columns = stat_3,
+      rows = (variable == "Genero" & label == "Feminino") |
+             (variable == "Isolamento" & label == "Sim") |
+             (variable == "Trabalha" & label == "Não") |
+             (variable == "Profissional_Saude" & label == "Não") |
+             (variable == "Renda_familiar" & label == "até R$ 1254,00") |
+             (variable == "Consulta_Nutricionista" & label == "Sim") |
+             (variable == "Dificuldade_Financeira" & label == "Sim") |
+             (variable == "Acesso_Alimento" & label == "Sim") |
+             (variable == "Tempo_Preparo_Refeicao" & label %in% c("Aumentou", "Diminuiu")) |
+             (variable == "atividade_fisica_pandemia" & label == "Aumentou")
+    )
+  ) %>%
+
+  # COLUNA NÃO CONSUMO (stat_4)
+  tab_style(
+    style = cell_text(color = "blue", weight = "bold"),
+    locations = cells_body(
+      columns = stat_4,
+      rows = (variable == "Genero" & label == "Feminino") |
+             (variable == "Raca_cor" & label == "Branca") |
+             (variable == "Regiao" & label == "Sul") |
+             (variable == "Trabalha" & label == "Não") |
+             (variable == "Consulta_Nutricionista" & label == "Sim") |
+             (variable == "Tempo_Preparo_Refeicao" & label == "Aumentou") |
+             (variable == "atividade_fisica_pandemia" & label == "Aumentou")
+    )
+  ) %>%
+  tab_style(
+    style = cell_text(color = "red", weight = "bold"),
+    locations = cells_body(
+      columns = stat_4,
+      rows = (variable == "Genero" & label == "Masculino") |
+             (variable == "Raca_cor" & label %in% c("Parda", "Preta")) |
+             (variable == "Regiao" & label %in% c("Nordeste", "Norte")) |
+             (variable == "Trabalha" & label == "Sim") |
+             (variable == "Consulta_Nutricionista" & label == "Não") |
+             (variable == "Tempo_Preparo_Refeicao" & label == "Diminuiu") |
+             (variable == "atividade_fisica_pandemia" & label == "Não tenho o hábito")
+    )
+  ) %>%
+  fmt_markdown(columns = label) %>%
+  tab_options(
+    table.font.size = "20px",    
+    heading.title.font.size = "26px",
+    column_labels.font.size = "22px"
+  )
+```
+
+# **INTRODUÇÃO** {data-background-image="Capa_proj1.png" style="text-align:center"}
+
+## **O Contexto da Pandemia**
+
+A **pandemia** de COVID-19, iniciada em 2020, foi um evento que alterou profundamente a estrutura da sociedade:
+
+-   **Impactos Socioeconômicos:** Perda de renda e aumento da insegurança alimentar.
+-   **Mudanças Comportamentais:** Isolamento social e alteração nas rotinas de trabalho e lazer.
+-   **Saúde Mental:** Aumento de níveis de estresse e ansiedade.
 
 ::: box-blue
-Este é um bloco azul.
+**Reflexo na Alimentação:**
+
+Estudos indicam que o estresse e a facilidade de acesso a alimentos processados durante o isolamento mudaram o perfil de consumo das famílias brasileiras.
 :::
 
-::: box-green
-Este é um bloco verde.
-:::
+## **Embutidos**
 
 ::: box-purple
-**TÍTULO OPCIONAL**
 
-Este é um bloco roxo.
-:::
-
-::: box-orange
-Este é um bloco laranja.
-:::
-
-## **LISTA NÃO ORDENADA**
-
-::: box-blue
-- Estatística
-- Matemática
-- Programação
-:::
-
-## **LISTA NÃO ORDENADA ANINHADA**
-- Frutas
-    - Maçã
-    - Banana
-- Verduras
-    - Alface
-    - Cenoura
-    
-## LISTA ORDENADA
-
-:::box-orange
-1. Coletar dados
-2. Organizar informações
-3. Aplicar análise estatística
-:::
-
-## **LISTAS ORDENADAS ANINHADAS**
-
-1. Preparação
-    1. Coletar materiais
-    2. Definir objetivos
-2. Execução
-
-## **LISTA DE TAREFAS**
-
-::: box-purple
-- [x] Comprar leite
-- [ ] Estudar Quarto
-- [ ] Enviar relatório
-:::
-
-## **LINKS**
-Confira a documentação oficial do [Quarto](https://quarto.org).
-
-## **EQUAÇÕES**
-A reta é descrita por $y = mx + b$.
-
-Segue uma equação de destaque:
-$$
-y = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
-$$
-
-Mais exemplos:
-
-* Frações: $\frac{a}{b}$
-* Raiz quadrada: $\sqrt{x}$
-* Expoentes: $x^2$
-* Índices: $x_i$
-* Somatórios:  $\sum_{i=1}^{n} x_i$
-
-## **IMAGENS**
-![](Rstudio.png){style="width:50%;"}
-
-## **IMAGENS COM EDIÇÕES**
-![](Rstudio.png){fig-align="center" width=100%}
-
-## **TABELAS**
-| Disciplina     | Professor        | Horário   |
-|----------------|-----------------|-----------|
-| Estatística    | Prof. Guilherme | 08h-10h   |
-| Matemática     | Prof. Ana       | 10h-12h   |
-| Programação    | Prof. João      | 14h-16h   |
-
-| Produto | Preço | Quantidade |
-|:--------|------:|:----------:|
-| Lápis   |  1.50 |     10     |
-| Caderno | 12.00 |     5      |
-| Mochila | 75.00 |     1      |
-
-## **SLIDE COM ABAS**
-
-::: {.panel-tabset}
-
-### Aba 1
-
-Conteúdo da primeira aba.
-
-### Aba 2
-
-Conteúdo da segunda aba.
-
-### Aba 3
-
-Conteúdo da terceira aba.
+- Rápido preparo
+- Baixo custo
 
 :::
 
-## Exemplo de colunas
+**Investigar** como o consumo desses itens mudou durante a pandemia é fundamental para entender a qualidade nutricional da população **sob estresse**.
+
+**Pergunta Central:** Quais fatores sociodemográficos, econômicos e emocionais estão associados à mudança no consumo de embutidos durante o período pandêmico?
+
+# **METODOLOGIA** {data-background-image="Capa_proj1.png" style="text-align:center"}
+
+##
 
 :::: columns
 
-::: {.column width="60%"}
-- Esta é a primeira coluna
-- Ela ocupa **60% da largura**
+::: {.column width="45%"}
+### Origem e Banco
+
+::: {.box-purple style="font-size: 0.7em;"}
+**Origem dos Dados**
+
+- Questionário online (2022).
+- Pós-graduação Nutrição (UFF).
+- 2.310 indivíduos analisados.
 :::
 
-::: {.column width="40%"}
-- Esta é a segunda coluna
-- Ela ocupa **40% da largura**
+<br>
+
+::: {.box-brown style="font-size: 0.6em;"}
+**Composição do Banco**
+
+- **Categóricas:** 15 variáveis.
+- **Numéricas:** 4 variáveis.
+- **Aberta:** 1 variável.
+- **Resposta:** 8 variáveis.
+:::
+:::
+
+::: {.column width="55%"}
+### Classificação das Variáveis
+
+::: box-gray
+::: {.tabela-scroll}
+
+| Variável | Tipo | Classificação |
+|:---|:---|:---|
+| Gênero | Categórica | Nominal dicotômica |
+| Raça/Cor | Categórica | Nominal politômica |
+| Região | Categórica | Nominal politômica |
+| Isolamento | Categórica | Nominal dicotômica |
+| Trabalha | Categórica | Nominal dicotômica |
+| Profissional Saúde | Categórica | Nominal dicotômica |
+| Renda familiar | Categórica | Ordinal |
+| Escolaridade | Categórica | Ordinal |
+| Covid | Categórica | Nominal dicotômica |
+| Consulta Nutricionista | Categórica | Nominal dicotômica |
+| Dificuldade Financeira | Categórica | Nominal dicotômica |
+| Acesso Alimento | Categórica | Nominal dicotômica |
+| Tempo Preparo Refeição | Categórica | Ordinal |
+| Cigarro | Categórica | Nominal dicotômica |
+| Atividade Fisica Pandemia | Categórica | Ordinal politômica |
+| Idade | Numérica | Contínua |
+| Altura | Numérica | Contínua |
+| Peso | Numérica | Contínua |
+| IMC | Numérica | Contínua |
+| Sentimentos Pandemia | Qualitativa | Variável aberta |
+| **Embutidos** | Categórica | Ordinal politômica (Resposta) |
+
+:::
+:::
 :::
 
 ::::
 
-## *SCROLLING* {.scrollable}
+# **RESULTADOS** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
-Este slide demonstra o uso da classe **scrollable**, que permite adicionar **rolagem vertical** quando o conteúdo é muito grande.
+## {.scrollable background-color="white"}
 
-Este é um exemplo de texto genérico utilizado apenas para preencher o slide e demonstrar como o conteúdo pode ultrapassar a altura da tela.
-
-- Item 1
-- Item 2
-- Item 3
-- Item 4
-- Item 5
-
-Quando há muito conteúdo, o slide normalmente ficaria visualmente sobrecarregado. Com o uso de `scrollable`, é possível manter tudo em um único slide e permitir que o usuário role o conteúdo.
-
-- Item A
-- Item B
-- Item C
-- Item D
-- Item E
-
-## **CRIANDO UMA CHUNK**
 ```{r}
-x <- 1:10
-hist(x)
-```
+tabela
 
-## CHUNK COM NOME
-```{r boxplot}
-x <- 1:10
-boxplot(x)
-```
-
-## **CHUNK PERSONALIZADA**
-```{r, fig.width=10, fig.height=4}
-hist(rnorm(100), col="skyblue", main="Histograma")
 ```

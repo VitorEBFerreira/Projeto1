@@ -3,8 +3,8 @@
 .reveal {
   font-family: "Inter", "Segoe UI", Arial, sans-serif;
   font-size: 30px;
-  background-color: #eef2f7; /* fundo suave, cinza-azulado pastel */
-  color: #0f172a;
+  background-color: #e8e3dd;
+  color: #000000;
 }
 
 .reveal .slides section li{
@@ -17,9 +17,9 @@
 
 /* ===== Títulos ===== */
 .reveal h1 {
-  font-size: 2.4em;
+  font-size: 3.3em;
   font-weight: 800;
-  color: #336699;
+  color: #726b5f;
 }
 
 .reveal h2 {
@@ -39,9 +39,7 @@
 .reveal .title-slide {
   background: linear-gradient(
     135deg,
-    #2563eb99 0%,   /* azul com transparência */
-    #7c3aed99 50%,   /* roxo com transparência */
-    #05966999 100%   /* verde com transparência */
+    #726b5f
   );
   color: #336699;
 }
@@ -67,6 +65,22 @@
 .box-blue {
   border-left: 8px solid #2563eb;
   background: #eff6ff;
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.box-brown {
+  border-left: 8px solid #644117;
+  background: #cdbbab;
+  padding: 0.7em;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.box-gray {
+  border-left: 8px solid #dcdcdc;
+  background: #f9f9f9;
   padding: 0.7em;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.08);
@@ -132,3 +146,21 @@
   color: #64748b;
 }
 
+.tabela-scroll {
+  max-height: 480px; 
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.tabela-scroll table {
+  font-size: 0.75em !important;
+  width: 100%;
+}
+
+.reveal .slides section {
+  padding-top: 10px !important;
+}
