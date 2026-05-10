@@ -521,6 +521,83 @@ tabela_quanti <- DadosEmbQuanti %>%
   )
 ```
 
+```{r,include=F}
+
+nuvem = Dados %>% select(sentimentos_pandemia,"Embutidos")
+
+frequencia_palavras <- nuvem %>%
+  mutate(texto_limpo = as.character(sentimentos_pandemia)) %>%
+  mutate(texto_limpo = str_replace_all(texto_limpo, "[\\.,!?;:()\\[\\]{}“”\"'-]", "")) %>%
+  mutate(texto_limpo = str_to_lower(texto_limpo)) %>%
+  unnest_tokens(output = palavra, input = texto_limpo) %>%
+  filter(palavra != "") %>%
+  filter(str_length(palavra) > 3) %>%
+  count(palavra, sort = TRUE, name = "n") %>%
+  mutate(porc = round((n / sum(n)) * 100, 2))
+
+
+frequencia_palavras_embutidos <- nuvem %>%
+  mutate(texto_limpo = as.character(sentimentos_pandemia)) %>%
+  mutate(texto_limpo = str_replace_all(texto_limpo, "[\\.,!?;:()\\[\\]{}“”\"'-]", "")) %>%
+  mutate(texto_limpo = str_to_lower(texto_limpo)) %>%
+  unnest_tokens(output = palavra, input = texto_limpo) %>%
+  filter(palavra != "") %>%
+  filter(str_length(palavra) > 3) %>%
+  group_by(Embutidos, palavra) %>%   
+  summarise(n = n()) %>%   
+  mutate(porc = round((n / sum(n)) * 100, 2))           
+
+ggplot(frequencia_palavras, 
+       aes(label = palavra, 
+       size = n)) +
+  geom_text_wordcloud() +
+  theme_minimal()
+
+
+
+wordcloud2(data = frequencia_palavras)
+
+
+frequencia_palavras$angle <- sample(c(0,90), nrow(frequencia_palavras), replace = TRUE)
+
+frequencia_palavras %>% 
+  ggplot(aes(label = palavra, 
+             size = log(n+1),
+             angle = angle,
+             color = as.character(n)))+   
+  scale_size_area(max_size = 11)+
+  scale_color_manual(values =glasbey()) +  
+  geom_text_wordcloud(seed=123,                                   shape = "square",
+                      rm_outside = T)+
+  theme_bw()
+
+frequencia_palavras %>% 
+  filter(n>1)%>%
+  ggplot(aes(label = palavra, 
+             size = log(n+1),
+             angle = angle,
+             color = as.character(n)))+   
+  scale_size_area(max_size = 18)+
+  scale_color_manual(values =glasbey()) +
+  geom_text_wordcloud(seed=123,
+                      shape = "square",
+                      rm_outside = T)+
+  theme_bw()
+
+
+frequencia_palavras2 = frequencia_palavras%>%
+  mutate(n=log(n+1))
+
+wordcloud2(
+  data = frequencia_palavras2,
+  size = 0.7,          
+  fontWeight = 'bold',  
+  color='random-light', 
+  backgroundColor="dark",
+  shape="circle"
+)
+
+```
 
 # **INTRODUÇÃO** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
