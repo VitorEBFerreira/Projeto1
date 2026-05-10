@@ -50,7 +50,6 @@ theme_gtsummary_language("pt", big.mark = ".", decimal.mark = ",")
 
 # Dados ####
 
-# Dados = read.xlsx("docs/Nutricao.xlsx")
 Dados = read.xlsx("Nutricao.xlsx")
 
 DadosEmb = Dados %>%  select(1:20, "Embutidos")
@@ -331,6 +330,198 @@ tabela <- DadosEmbQuali %>%
   )
 ```
 
+```{r,include=F}
+
+DadosEmbQuanti = Dados %>% select(16:19, "Embutidos")
+
+# Idade - Não Normal e Heterocedasticidade ####
+ggplot(DadosEmbQuanti, aes(x = Idade)) +
+  geom_density(fill = "blue", alpha = 0.6) +
+  facet_wrap(~ Embutidos) +
+  xlab("Idade") +
+  ylab("Densidade") +
+  theme_bw() +
+  theme(text = element_text(size = 14))
+ggplot(DadosEmbQuanti, aes(sample = Idade)) +
+  stat_qq_band(fill="lightblue") +
+  stat_qq_line() +
+  stat_qq_point() +
+  facet_wrap(~Embutidos,scales = "free")+
+  xlab("Teoricos")+
+  ylab("Amostral")+
+  labs(title = "Idade")+
+  theme_bw() +
+  theme(text = element_text(size = 14))
+bartlett.test(formula = Idade~Embutidos,data = DadosEmbQuanti)
+LeveneTest(formula = Idade~Embutidos,data = DadosEmbQuanti)
+
+
+# Altura - Normal e Homocedasticidade ####
+ggplot(DadosEmbQuanti, aes(x = Altura)) +
+  geom_density(fill = "blue", alpha = 0.6) +
+  facet_wrap(~ Embutidos) +
+  xlab("Altura") +
+  ylab("Densidade") +
+  theme_bw() +
+  theme(text = element_text(size = 14))
+ggplot(DadosEmbQuanti, aes(sample = Altura)) +
+  stat_qq_band(fill="lightblue") +
+  stat_qq_line() +
+  stat_qq_point() +
+  facet_wrap(~Embutidos,scales = "free")+
+  xlab("Quantis Teoricos")+
+  ylab("Quantis Amostrais")+
+  labs(title = "Altura")+
+  theme_bw() +
+  theme(text = element_text(size = 14))
+bartlett.test(formula = Altura~Embutidos,data = DadosEmbQuanti)
+LeveneTest(formula = Altura~Embutidos,data = DadosEmbQuanti)
+
+# Peso - Não Normal e Heterocedasticidade ####
+ggplot(DadosEmbQuanti, aes(x = Peso)) +
+  geom_density(fill = "blue", alpha = 0.6) +
+  facet_wrap(~ Embutidos) +
+  xlab("Peso") +
+  ylab("Densidade") +
+  theme_bw() +
+  theme(text = element_text(size = 14))
+ggplot(DadosEmbQuanti, aes(sample = Peso)) +
+  stat_qq_band(fill="lightblue") +
+  stat_qq_line() +
+  stat_qq_point() +
+  facet_wrap(~Embutidos,scales = "free")+
+  xlab("Quantis Teoricos")+
+  ylab("Quantis Amostrais")+
+  labs(title = "Peso")+
+  theme_bw() +
+  theme(text = element_text(size = 14))
+bartlett.test(formula = Peso~Embutidos,data = DadosEmbQuanti)
+LeveneTest(formula = Peso~Embutidos,data = DadosEmbQuanti)
+
+# IMC - Não Normal e Heterocedasticidade ####
+ggplot(DadosEmbQuanti, aes(x = IMC)) +
+  geom_density(fill = "blue", alpha = 0.6) +
+  facet_wrap(~ Embutidos) +
+  xlab("IMC") +
+  ylab("Densidade") +
+  theme_bw() +
+  theme(text = element_text(size = 14))
+ggplot(DadosEmbQuanti, aes(sample = IMC)) +
+  stat_qq_band(fill="lightblue") +
+  stat_qq_line() +
+  stat_qq_point() +
+  facet_wrap(~Embutidos,scales = "free")+
+  xlab("Quantis Teoricos")+
+  ylab("Quantis Amostrais")+
+  labs(title = "IMC")+
+  theme_bw() +
+  theme(text = element_text(size = 14))
+bartlett.test(formula = IMC~Embutidos,data = DadosEmbQuanti)
+LeveneTest(formula = IMC~Embutidos,data = DadosEmbQuanti)
+
+# Tabela com pvalor ----
+tbl_summary(data = DadosEmbQuanti,
+            by = Embutidos,
+            statistic = all_continuous() ~ "{mean} ({sd})"
+) |>
+  add_p(
+    test = everything() ~ "oneway.test",
+    test.args = list(
+      c(Idade, Peso, IMC) ~ list(var.equal = FALSE),   
+      Altura ~ list(var.equal = TRUE) 
+    ),
+    pvalue_fun = label_style_pvalue(digits = 3)
+  ) %>% 
+  bold_p(t = 0.05)
+
+# Games_Howell e Tukey####
+games_howell_test(Idade~Embutidos, data = DadosEmbQuanti)
+
+games_howell_test(Peso~Embutidos, data = DadosEmbQuanti)
+
+games_howell_test(IMC~Embutidos, data = DadosEmbQuanti)
+
+tukey_hsd(aov(Altura~Embutidos, data = DadosEmbQuanti))
+
+comparacoes_letras <- function(data, variable, by, ...) {
+  letras <- data.frame(
+    variavel = c("Idade", "Altura", "Peso", "IMC"),
+    comparacao = c(
+      # Idade
+      "Aumentou = a<br>Diminuiu = b<br>Não alterou = b<br>Não consumo = ab",
+      
+      # Altura
+      "Aumentou = a<br>Diminuiu = ab<br>Não alterou = a<br>Não consumo = b",
+      
+      # Peso (ajuste depois se calcular)
+      "Aumentou = a<br>Diminuiu = b<br>Não alterou = b<br>Não consumo = c",
+      
+      # IMC (ajuste depois se calcular)
+      "Aumentou = a<br>Diminuiu = b<br>Não alterou = b<br>Não consumo = c"
+    ),
+    stringsAsFactors = FALSE
+  )
+  result <- letras$comparacao[letras$variavel == variable]
+  tibble::tibble(`**Comparações Múltiplas**` = result)
+}
+
+#| include: false
+
+# 1. Função de Letras (Post-hoc)
+comparacoes_letras <- function(data, variable, by, ...) {
+  letras <- data.frame(
+    variavel = c("Idade", "Altura", "Peso", "IMC"),
+    comparacao = c(
+      "Aumentou = a<br>Não consumo = ab<br>Diminuiu = b<br>Não alterou = b",
+      "Aumentou = a<br>Não alterou = a<br>Diminuiu = ab<br>Não consumo = b",
+      "Aumentou = a<br>Diminuiu = b<br>Não alterou = b<br>Não consumo = c",
+      "Aumentou = a<br>Diminuiu = b<br>Não alterou = b<br>Não consumo = c"
+    ),
+    stringsAsFactors = FALSE
+  )
+  result <- letras$comparacao[letras$variavel == variable]
+  tibble::tibble(`**Comparações Múltiplas**` = result)
+}
+
+tabela_quanti <- DadosEmbQuanti %>%
+  tbl_summary(
+    by = Embutidos,
+    statistic = all_continuous() ~ "{mean} ({sd})",
+    digits = all_continuous() ~ 1,
+    label = list(
+      Idade ~ "Idade<sup>W</sup>",
+      Altura ~ "Altura<sup>A</sup>",
+      Peso ~ "Peso<sup>W</sup>",
+      IMC ~ "IMC<sup>W</sup>"
+    )
+  ) %>%
+  add_p(
+    test = list(
+      c(Idade, Peso, IMC) ~ "oneway.test", # ANOVA de Welch
+      Altura ~ "oneway.test"              # ANOVA clássica
+    ),
+    test.args = list(
+      c(Idade, Peso, IMC) ~ list(var.equal = FALSE),
+      Altura ~ list(var.equal = TRUE)
+    ),
+    pvalue_fun = label_style_pvalue(digits = 3)
+  ) %>%
+  bold_p(t = 0.05) %>% 
+  add_stat(
+    fns = everything() ~ comparacoes_letras,
+    location = everything() ~ "label"
+  ) %>%
+  modify_header(label ~ "**Variáveis**", all_stat_cols() ~ "**{level}**<br>N = {n}") %>%
+  modify_spanning_header(all_stat_cols() ~ "**Mudança no consumo de Embutidos**") %>%
+  as_gt() %>%
+  gt::fmt_markdown(columns = c(label, `**Comparações Múltiplas**`)) %>%
+  tab_options(
+    table.font.size = "18px",
+    column_labels.font.size = "20px"
+  )
+```
+
+
 # **INTRODUÇÃO** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
 ## **O Contexto da Pandemia**
@@ -349,7 +540,7 @@ Estudos indicam que o estresse e a facilidade de acesso a alimentos processados 
 
 ## **Embutidos**
 
-::: box-purple
+::: box-brown
 
 - Rápido preparo
 - Baixo custo
@@ -459,7 +650,7 @@ Adotou-se $\alpha = 0,05$. Resultados com $p$-valor $< 0,05$ são considerados e
 ## **Análise de Variáveis Qualitativas e Textual**
 
 ::: box-blue
-- **Normalidade:** Teste de **Shapiro-Wilk** e análise de histogramas/QQ-Plots.
+- **Normalidade:** TCL garante para amostras grande e análise de histogramas/QQ-Plots.
 - **Homocedasticidade:** Teste de **Levene** e **Bartlett**.
 :::
 
@@ -505,3 +696,11 @@ As análises foram desenvolvidas no software **R** (versão 4.x), utilizando o e
 tabela
 
 ```
+
+## {.scrollable background-color="white"}
+
+```{r}
+tabela_quanti
+
+```
+
