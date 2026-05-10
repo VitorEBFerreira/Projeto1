@@ -328,6 +328,72 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
 </div>
 </div>
 </div></div>
+</section>
+<section id="análise-de-variáveis-qualitativas" class="slide level2">
+<h2><strong>Análise de Variáveis Qualitativas</strong></h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<h3 id="testes-de-associação">Testes de Associação</h3>
+<div class="box-gray">
+<ul>
+<li><strong>Qui-quadrado <span class="math inline">\(Q\)</span>:</strong> Frequências esperadas em todas as células são <span class="math inline">\(\ge 5\)</span>.</li>
+<li><strong>Teste exato de Fisher <span class="math inline">\(F\)</span>:</strong> Pelo menos uma frequência esperada <span class="math inline">\(&lt; 5\)</span>.</li>
+</ul>
+</div>
+</div><div class="column" style="width:50%;">
+<h3 id="força-e-localização">Força e Localização</h3>
+<div class="box-green">
+<ul>
+<li><strong>V de Cramér:</strong> Quantificar a intensidade da associação.</li>
+<li><strong>Resíduos Padronizados:</strong> Identificação de caselas influentes.</li>
+</ul>
+</div>
+</div><p><br></p>
+</div>
+<div class="box-blue">
+<p><strong>Nível de Significância:</strong> Adotou-se <span class="math inline">\(\alpha = 0,05\)</span>. Resultados com <span class="math inline">\(p\)</span>-valor <span class="math inline">\(&lt; 0,05\)</span> são considerados estatisticamente significativos.</p>
+</div>
+</section>
+<section id="análise-de-variáveis-qualitativas-e-textual" class="slide level2">
+<h2><strong>Análise de Variáveis Qualitativas e Textual</strong></h2>
+<div class="box-blue">
+<ul>
+<li><strong>Normalidade:</strong> Teste de <strong>Shapiro-Wilk</strong> e análise de histogramas/QQ-Plots.</li>
+<li><strong>Homocedasticidade:</strong> Teste de <strong>Levene</strong> e <strong>Bartlett</strong>.</li>
+</ul>
+</div>
+<p><br></p>
+<div class="columns">
+<div class="column" style="width:40%;">
+<h3 id="variáveis-numéricas">Variáveis numéricas</h3>
+<div class="box-gray">
+<ul>
+<li><strong>ANOVA one-way</strong></li>
+<li><strong>ANOVA de Welch</strong></li>
+</ul>
+</div>
+</div><div class="column" style="width:60%;">
+<h3 id="nuvem-de-palavras">Nuvem de Palavras</h3>
+<div class="box-green">
+<ul>
+<li><strong>Limpeza:</strong> Exclusão de <em>stop words</em>, palavras com menos de 3 caracteres e conversão para minúsculas.</li>
+<li><strong>Visualização:</strong> Frequência absoluta traduzida em tamanho de fonte proporcional.</li>
+</ul>
+</div>
+</div></div>
+</section>
+<section id="ferramentas-computacionais" class="slide level2">
+<h2><strong>Ferramentas Computacionais</strong></h2>
+<p>As análises foram desenvolvidas no software <strong>R</strong> (versão 4.x), utilizando o ecossistema <code>tidyverse</code> para manipulação de dados.</p>
+<section id="principais-pacotes-utilizados" class="box-green">
+<h3><strong>Principais Pacotes Utilizados:</strong></h3>
+<ul>
+<li><code>openxlsx</code>: Leitura da base de dados.</li>
+<li><code>gtsummary</code> &amp; <code>gt</code>: Construção de tabelas automáticas e estilização.</li>
+<li><code>rstatix</code> &amp; <code>DescTools</code>: Cálculo de resíduos e testes de variância.</li>
+<li><code>ggwordcloud</code> &amp; <code>wordcloud2</code>: Geração das nuvens de palavras.</li>
+</ul>
+</section>
 </section></section>
 <section>
 <section id="resultados" class="title-slide slide level1 center" data-background-image="Capa_proj1.png" style="text-align:center">
@@ -338,23 +404,23 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
 <h2></h2>
 <div class="cell">
 <div class="cell-output-display">
-<div id="toobcvdctt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#toobcvdctt table {
+<div id="ohgzghnkal" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ohgzghnkal table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#toobcvdctt thead, #toobcvdctt tbody, #toobcvdctt tfoot, #toobcvdctt tr, #toobcvdctt td, #toobcvdctt th {
+#ohgzghnkal thead, #ohgzghnkal tbody, #ohgzghnkal tfoot, #ohgzghnkal tr, #ohgzghnkal td, #ohgzghnkal th {
   border-style: none;
 }
 
-#toobcvdctt p {
+#ohgzghnkal p {
   margin: 0;
   padding: 0;
 }
 
-#toobcvdctt .gt_table {
+#ohgzghnkal .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -380,12 +446,12 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-left-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_caption {
+#ohgzghnkal .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#toobcvdctt .gt_title {
+#ohgzghnkal .gt_title {
   color: #333333;
   font-size: 26px;
   font-weight: initial;
@@ -397,7 +463,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-bottom-width: 0;
 }
 
-#toobcvdctt .gt_subtitle {
+#ohgzghnkal .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -409,7 +475,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-top-width: 0;
 }
 
-#toobcvdctt .gt_heading {
+#ohgzghnkal .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -421,13 +487,13 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-right-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_bottom_border {
+#ohgzghnkal .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_col_headings {
+#ohgzghnkal .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -442,7 +508,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-right-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_col_heading {
+#ohgzghnkal .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 22px;
@@ -462,7 +528,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   overflow-x: hidden;
 }
 
-#toobcvdctt .gt_column_spanner_outer {
+#ohgzghnkal .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 22px;
@@ -474,15 +540,15 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 4px;
 }
 
-#toobcvdctt .gt_column_spanner_outer:first-child {
+#ohgzghnkal .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#toobcvdctt .gt_column_spanner_outer:last-child {
+#ohgzghnkal .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#toobcvdctt .gt_column_spanner {
+#ohgzghnkal .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -494,11 +560,11 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   width: 100%;
 }
 
-#toobcvdctt .gt_spanner_row {
+#ohgzghnkal .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#toobcvdctt .gt_group_heading {
+#ohgzghnkal .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -524,7 +590,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   text-align: left;
 }
 
-#toobcvdctt .gt_empty_group_heading {
+#ohgzghnkal .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -539,15 +605,15 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   vertical-align: middle;
 }
 
-#toobcvdctt .gt_from_md > :first-child {
+#ohgzghnkal .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#toobcvdctt .gt_from_md > :last-child {
+#ohgzghnkal .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#toobcvdctt .gt_row {
+#ohgzghnkal .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -566,7 +632,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   overflow-x: hidden;
 }
 
-#toobcvdctt .gt_stub {
+#ohgzghnkal .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -579,7 +645,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 5px;
 }
 
-#toobcvdctt .gt_stub_row_group {
+#ohgzghnkal .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -593,15 +659,15 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   vertical-align: top;
 }
 
-#toobcvdctt .gt_row_group_first td {
+#ohgzghnkal .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#toobcvdctt .gt_row_group_first th {
+#ohgzghnkal .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#toobcvdctt .gt_summary_row {
+#ohgzghnkal .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -611,16 +677,16 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 5px;
 }
 
-#toobcvdctt .gt_first_summary_row {
+#ohgzghnkal .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_first_summary_row.thick {
+#ohgzghnkal .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#toobcvdctt .gt_last_summary_row {
+#ohgzghnkal .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -630,7 +696,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-bottom-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_grand_summary_row {
+#ohgzghnkal .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -640,7 +706,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 5px;
 }
 
-#toobcvdctt .gt_first_grand_summary_row {
+#ohgzghnkal .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -650,7 +716,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-top-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_last_grand_summary_row_top {
+#ohgzghnkal .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -660,11 +726,11 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-bottom-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_striped {
+#ohgzghnkal .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#toobcvdctt .gt_table_body {
+#ohgzghnkal .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -673,7 +739,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-bottom-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_footnotes {
+#ohgzghnkal .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -687,7 +753,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-right-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_footnote {
+#ohgzghnkal .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -696,7 +762,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 5px;
 }
 
-#toobcvdctt .gt_sourcenotes {
+#ohgzghnkal .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -710,7 +776,7 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   border-right-color: #D3D3D3;
 }
 
-#toobcvdctt .gt_sourcenote {
+#ohgzghnkal .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -718,72 +784,72 @@ Vitor Eduardo Bezerra Ferreira (<a href="mailto:ferreiravitor@id.uff.br" class="
   padding-right: 5px;
 }
 
-#toobcvdctt .gt_left {
+#ohgzghnkal .gt_left {
   text-align: left;
 }
 
-#toobcvdctt .gt_center {
+#ohgzghnkal .gt_center {
   text-align: center;
 }
 
-#toobcvdctt .gt_right {
+#ohgzghnkal .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#toobcvdctt .gt_font_normal {
+#ohgzghnkal .gt_font_normal {
   font-weight: normal;
 }
 
-#toobcvdctt .gt_font_bold {
+#ohgzghnkal .gt_font_bold {
   font-weight: bold;
 }
 
-#toobcvdctt .gt_font_italic {
+#ohgzghnkal .gt_font_italic {
   font-style: italic;
 }
 
-#toobcvdctt .gt_super {
+#ohgzghnkal .gt_super {
   font-size: 65%;
 }
 
-#toobcvdctt .gt_footnote_marks {
+#ohgzghnkal .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#toobcvdctt .gt_asterisk {
+#ohgzghnkal .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#toobcvdctt .gt_indent_1 {
+#ohgzghnkal .gt_indent_1 {
   text-indent: 5px;
 }
 
-#toobcvdctt .gt_indent_2 {
+#ohgzghnkal .gt_indent_2 {
   text-indent: 10px;
 }
 
-#toobcvdctt .gt_indent_3 {
+#ohgzghnkal .gt_indent_3 {
   text-indent: 15px;
 }
 
-#toobcvdctt .gt_indent_4 {
+#ohgzghnkal .gt_indent_4 {
   text-indent: 20px;
 }
 
-#toobcvdctt .gt_indent_5 {
+#ohgzghnkal .gt_indent_5 {
   text-indent: 25px;
 }
 
-#toobcvdctt .katex-display {
+#ohgzghnkal .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#toobcvdctt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ohgzghnkal div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

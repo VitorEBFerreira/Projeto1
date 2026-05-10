@@ -425,6 +425,78 @@ Estudos indicam que o estresse e a facilidade de acesso a alimentos processados 
 
 ::::
 
+## **Análise de Variáveis Qualitativas**
+
+:::: columns
+
+::: {.column width="50%"}
+### Testes de Associação
+::: box-gray
+- **Qui-quadrado $Q$:** Frequências esperadas em todas as células são $\ge 5$.
+- **Teste exato de Fisher $F$:** Pelo menos uma frequência esperada $< 5$.
+:::
+
+:::
+
+::: {.column width="50%"}
+### Força e Localização
+::: box-green
+- **V de Cramér:** Quantificar a intensidade da associação.
+- **Resíduos Padronizados:** Identificação de caselas influentes.
+:::
+:::
+
+<br>
+
+::::
+
+::: box-blue
+**Nível de Significância:**
+Adotou-se $\alpha = 0,05$. Resultados com $p$-valor $< 0,05$ são considerados estatisticamente significativos.
+:::
+
+
+## **Análise de Variáveis Qualitativas e Textual**
+
+::: box-blue
+- **Normalidade:** Teste de **Shapiro-Wilk** e análise de histogramas/QQ-Plots.
+- **Homocedasticidade:** Teste de **Levene** e **Bartlett**.
+:::
+
+<br>
+
+:::: columns
+
+::: {.column width="40%"}
+### Variáveis numéricas
+::: box-gray
+- **ANOVA one-way**
+- **ANOVA de Welch**
+:::
+:::
+
+::: {.column width="60%"}
+### Nuvem de Palavras
+::: box-green
+- **Limpeza:** Exclusão de *stop words*, palavras com menos de 3 caracteres e conversão para minúsculas.
+- **Visualização:** Frequência absoluta traduzida em tamanho de fonte proporcional.
+:::
+:::
+
+::::
+
+## **Ferramentas Computacionais**
+
+As análises foram desenvolvidas no software **R** (versão 4.x), utilizando o ecossistema `tidyverse` para manipulação de dados.
+
+::: box-green
+### **Principais Pacotes Utilizados:**
+- `openxlsx`: Leitura da base de dados.
+- `gtsummary` & `gt`: Construção de tabelas automáticas e estilização.
+- `rstatix` & `DescTools`: Cálculo de resíduos e testes de variância.
+- `ggwordcloud` & `wordcloud2`: Geração das nuvens de palavras.
+:::
+
 # **RESULTADOS** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
 ## {.scrollable background-color="white"}
