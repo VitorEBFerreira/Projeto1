@@ -690,14 +690,14 @@ As análises foram desenvolvidas no software **R** (versão 4.x), utilizando o e
 
 # **RESULTADOS** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
-## {.scrollable background-color="white"}
+## Categóricas {.scrollable background-color="white"}
 
 ```{r}
 tabela
 
 ```
 
-## {.scrollable background-color="white"}
+## Numéricas {.scrollable background-color="white"}
 
 ```{r}
 tabela_quanti
