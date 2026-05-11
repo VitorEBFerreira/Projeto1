@@ -802,8 +802,9 @@ tabela_quanti
 ## Nuvem de palavras
 
 ```{r}
-#| out-height: "550px"
-#| out-width: "100%"
+#| out-width: "70%" 
+#| out-height: "700px"
+#| fig-align: center
 wordcloud2(
   data = df_nuvem,
   size = 0.7,          
@@ -813,3 +814,45 @@ wordcloud2(
   shape = "circle"
 )
 ```
+
+# **CONCLUSÃO** {data-background-image="Capa_proj1.png" style="text-align:center"}
+
+## **Considerações Finais**
+
+:::: columns
+
+::: {.column width="45%"}
+### Fatores Determinantes
+
+::: {.box-purple style="font-size: 0.8em;"}
+**Emoções:** **Ansiedade e estresse** foram os sentimentos que mais foram citados.
+:::
+
+<br>
+
+::: {.box-brown style="font-size: 0.8em;"}
+**Diferenças Biométricas:** **Peso e IMC** tiveram as maiores mudanças dentre os que consomem Embutidos.
+:::
+:::
+
+::: {.column width="55%"}
+### Implicações e Futuro
+
+::: {.box-orange style="font-size: 0.8em;"}
+**Determinantes Sociais:** Os que **Não** tiveram **Consulta com Nutricionista** tiveram um aumento no consumo de embutidos.
+:::
+
+<br>
+
+::: {.box-gray style="font-size: 0.8em;"}
+**Saúde Pública:** Intervenções nutricionais devem estar junto ao **suporte mental**, pois o emocional afeta na alimentação.
+:::
+:::
+
+::::
+
+<br>
+
+::: {.box-blue style="font-size: 1.0em;"}
+O consumo de embutidos na pandemia foi um reflexo da **vulnerabilidade emocional e econômica** da população.
+:::
