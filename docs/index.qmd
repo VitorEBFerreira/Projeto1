@@ -43,6 +43,7 @@ require(png)
 library(tidyverse)
 library(broom)
 library(tinytex)
+library(htmlwidgets)
 
 # Formatação pra português ####
 
@@ -465,9 +466,6 @@ comparacoes_letras <- function(data, variable, by, ...) {
   tibble::tibble(`**Comparações Múltiplas**` = result)
 }
 
-#| include: false
-
-# 1. Função de Letras (Post-hoc)
 comparacoes_letras <- function(data, variable, by, ...) {
   letras <- data.frame(
     variavel = c("Idade", "Altura", "Peso", "IMC"),
@@ -594,11 +592,30 @@ wordcloud2(
   fontWeight = 'bold',  
   color='random-light', 
   backgroundColor="dark",
-  shape="circle"
+  shape = "circle"
 )
 
-```
+paleta_embutidos <- colorRampPalette(c("#9d2a2a", "gray"))
 
+df_nuvem <- frequencia_palavras2 %>%
+  ungroup() %>%
+  select(palavra, n) %>%
+  mutate(n = as.numeric(n)) %>%
+  arrange(desc(n))
+
+wordcloud2(
+  data = df_nuvem,
+  size = 0.7,         
+  fontWeight = 'bold',  
+  color = paleta_embutidos(nrow(df_nuvem)), 
+  backgroundColor = "#e8e3dd",      
+  shape = "circle"
+)
+
+
+
+
+```
 # **INTRODUÇÃO** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
 ## **O Contexto da Pandemia**
@@ -767,17 +784,32 @@ As análises foram desenvolvidas no software **R** (versão 4.x), utilizando o e
 
 # **RESULTADOS** {data-background-image="Capa_proj1.png" style="text-align:center"}
 
-## Categóricas {.scrollable background-color="white"}
+## Variáveis Qualitativa {.scrollable background-color="white"}
 
 ```{r}
 tabela
 
 ```
 
-## Numéricas {.scrollable background-color="white"}
+## Variáveis Quantitativas {.scrollable background-color="white"}
 
 ```{r}
 tabela_quanti
 
 ```
 
+
+## Nuvem de palavras
+
+```{r}
+#| out-height: "550px"
+#| out-width: "100%"
+wordcloud2(
+  data = df_nuvem,
+  size = 0.7,          
+  fontWeight = 'bold',  
+  color = paleta_embutidos(nrow(df_nuvem)), 
+  backgroundColor = "#e8e3dd",      
+  shape = "circle"
+)
+```
